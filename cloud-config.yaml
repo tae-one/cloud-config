@@ -1,6 +1,6 @@
 #cloud-config
 
-hostname: tae-one
+hostname: media-server
 
 write-files:
     - path: /etc/conf.d/nfs
