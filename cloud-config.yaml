@@ -7,6 +7,10 @@ write-files:
       permissions: '0644'
       content: |
         OPTS_RPC_MOUNTD=""
+    - path: /etc/exports
+      permissions: '0644'
+      content: |
+        /mnt/vol_1      192.168.11.0/255.255.255.0(no_root_squash,rw,sync)
 coreos:
   update:
     reboot-strategy: off
