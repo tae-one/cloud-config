@@ -15,7 +15,7 @@ write-files:
       permissions; '0644'
       content: |
         /dev/sdb1       /mnt/vol_1      ext4    rw,user,exec    0 0
-        192.168.11.36:/mnt/array_1/Sakai        /mnt/nfs        nfs     rsize=8192,wsize=8192,timeo=14,intr
+        192.168.11.36:/mnt/array1/Sakai        /mnt/nfs        nfs     rsize=8192,wsize=8192,timeo=14,intr
 coreos:
   update:
     reboot-strategy: off
