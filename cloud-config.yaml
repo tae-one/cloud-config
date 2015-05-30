@@ -17,6 +17,15 @@ coreos:
     - name: rpc-statd.service
       command: start
       enable: true
+    - name: rpcbind.service
+      command: start
+      enable: true
+    - name: rpc-mountd.service
+      command: start
+      enable: true
+    - name: nfsd.service
+      command: start
+      enable: true
     - name: mnt-nfs.mount
       command: start
       content: |
