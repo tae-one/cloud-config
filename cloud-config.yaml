@@ -12,7 +12,7 @@ write-files:
       content: |
         /mnt/vol_1      192.168.11.0/255.255.255.0(no_root_squash,rw,sync)
     - path: /etc/fstab
-      permissions; '0644'
+      permissions: '0644'
       content: |
         /dev/sdb1       /mnt/vol_1      ext4    rw,user,exec    0 0
         192.168.11.36:/mnt/array1/Sakai        /mnt/nfs        nfs     rsize=8192,wsize=8192,timeo=14,intr
