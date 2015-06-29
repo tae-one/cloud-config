@@ -1,51 +1,110 @@
 #cloud-config
 
-hostname: media-server
+hostname: tae-one
 
 write-files:
     - path: /etc/conf.d/nfs
       permissions: '0644'
       content: |
         OPTS_RPC_MOUNTD=""
-    - path: /etc/exports
-      permissions: '0644'
-      content: |
-        /mnt/vol_1      192.168.11.0/255.255.255.0(no_root_squash,rw,sync)
-    - path: /etc/fstab
-      permissions: '0644'
-      content: |
-        /dev/sdb1       /mnt/vol_1      ext4    rw,user,exec    0 0
-        192.168.11.36:/mnt/array1/Sakai        /mnt/nfs        nfs     rsize=8192,wsize=8192,timeo=14,intr
 coreos:
   update:
     reboot-strategy: off
-  etcd:
-    addr: 192.168.11.10:4001
-    peer-addr: 192.168.11.10:7001
   units:
+    - name: docker.service
+      command: start
+      enable: true
+    - name: docker-sabnzbd.service
+      command: start
+      content: |
+        [Unit]
+        After=docker.service
+
+        [Service]
+        TimeoutSec=0
+
+        ExecStartPre=/usr/bin/docker kill sabnzbd
+        ExecStartPre=/usr/bin/docker rm sabnzbd
+        ExecStartPre=/usr/bin/docker pull timhaak/sabnzbd
+
+        ExecStart=/usr/bin/docker run -h sabnzbd --name="sabnzbd" -v /etc/docker/sabnzbd:/config -v /mnt/vol_1/share:/data -p 8080:8080 -p 9090:9090 timhaak/sabnzbd
+
+        ExecStop=/usr/bin/docker stop sabnzbd
+
+        Restart=always
+        RestartSec=10
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: docker-plex.service
+      command: start
+      content: |
+        [Unit]
+        After=docker.service
+
+        [Service]
+        TimeoutSec=0
+
+        ExecStartPre=/usr/bin/docker kill plex
+        ExecStartPre=/usr/bin/docker rm plex
+        ExecStartPre=/usr/bin/docker pull timhaak/plex
+
+        ExecStart=/usr/bin/docker run -h plex --name "plex" -v /etc/docker/plex:/config -v /mnt/vol_1/share:/data -p 32400:32400 timhaak/plex
+
+        ExecStop=/usr/bin/docker stop plex
+
+        Restart=always
+        RestartSec=10
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: docker-sickbeard.service
+      command: start
+      content: |
+        [Unit]
+        After=docker.service
+
+        [Service]
+        TimeoutSec=0
+
+        ExecStartPre=/usr/bin/docker kill sickbeard
+        ExecStartPre=/usr/bin/docker rm sickbeard
+        ExecStartPre=/usr/bin/docker pull timhaak/sickbeard
+
+        ExecStart=/usr/bin/docker run -h sickbeard --name="sickbeard" -v /etc/docker/sickbeard:/config -v /mnt/vol_1/share:/data -p 8081:8081 timhaak/sickbeard
+
+        ExecStop=/usr/bin/docker stop sickbeard
+
+        Restart=always
+        RestartSec=10
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: docker-couchpotato.service
+      command: start
+      content: |
+        [Unit]
+        After=docker.service
+
+        [Service]
+        TimeoutSec=0
+
+        ExecStartPre=/usr/bin/docker kill couchpotato
+        ExecStartPre=/usr/bin/docker rm couchpotato
+        ExecStartPre=/usr/bin/docker pull timhaak/couchpotato
+
+        ExecStart=/usr/docker/docker run -h couchpotato -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/movies -p 5050:5050 --name couchpotato timhaak/couchpotato
+
+        ExecStop=/usr/bin/docker stop couchpotato
+
+        Restart=always
+        RestartSec=10
+
+        [Install]
+        WantedBy=multi-user.target
     - name: rpc-statd.service
       command: start
       enable: true
-    - name: rpcbind.service
-      command: start
-      enable: true
-    - name: rpc-mountd.service
-      command: start
-      enable: true
-    - name: nfsd.service
-      command: start
-      enable: true
-    - name: mnt-nfs.mount
-      command: start
-      content: |
-        [Mount]
-        What=192.168.11.36:/mnt/array1/Sakai
-        Where=/mnt/nfs
-        type=nfs
-    - name: etcd.service
-      command: start
-    - name: fleet.service
-      command: start
     - name: home.network
       runtime: true
       content: |
@@ -59,6 +118,13 @@ coreos:
         DNS=8.8.4.4
 users:
   - name: core
+    passwd: $6$rounds=4096$okocwVWBdlLA$G5WtoBOKCGirVnSIIpaGxBEhNsJktLMpy54GylKw8f202Mbv.k8Bw/z7x.5Ztb03pMg7E/lmnh3ZfEXtqvgQZ0
+  - groups:
+      - sudo
+      - docker
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfdmWUV2Q1kEsd9Ow6BjmYT6Vi3tUFfF01h8Nmz14E5OUN8h7tYr0ppGySYyhzcjxpaXKexGg49TNgL8L2W4MDqCy0hD4sXsYwPzSdCpWVQkIjY/uSwTGXbKRG8wQUyMkKWpU72KtAE1G+dbqjlygJrhIsUxmDz6qB/2vFIPpfWkiyCkT/4UsQBeaqGcvw4tgq90ZdEucARd+3gJM/7Mr/gQTHhCNYlYcSsO81lIfvkYzr8cDcTJNfW3PsP8KmuAumAy+5ML+VTaskvdQn4NkHc5sDWYZ7zW5qaTHN4Sn1OZCfRYM/jbY1s/iIoiWqMpEffqyt7fuVxXZ2SNsxmMGd tae.one@gmail.com
+  - name: tae
     passwd: $6$rounds=4096$okocwVWBdlLA$G5WtoBOKCGirVnSIIpaGxBEhNsJktLMpy54GylKw8f202Mbv.k8Bw/z7x.5Ztb03pMg7E/lmnh3ZfEXtqvgQZ0
   - groups:
       - sudo
