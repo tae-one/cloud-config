@@ -93,7 +93,7 @@ coreos:
         ExecStartPre=/usr/bin/docker rm couchpotato
         ExecStartPre=/usr/bin/docker pull timhaak/couchpotato
 
-        ExecStart=/usr/docker/docker run -h couchpotato -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/movies -p 5050:5050 --name couchpotato timhaak/couchpotato
+        ExecStart=/usr/bin/docker run -h couchpotato --name="couchpotato" -v /etc/docker/couchpotato:/config -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/movies -p 5050:5050 timhaak/couchpotato
 
         ExecStop=/usr/bin/docker stop couchpotato
 
