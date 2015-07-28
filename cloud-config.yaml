@@ -1,6 +1,6 @@
 #cloud-config
 
-hostname: tae-one
+hostname: tae.one
 
 write-files:
     - path: /etc/conf.d/nfs
@@ -23,8 +23,8 @@ coreos:
         [Service]
         TimeoutSec=0
 
-        ExecStartPre=/usr/bin/docker kill sabnzbd
-        ExecStartPre=/usr/bin/docker rm sabnzbd
+        ExecStartPre=-/usr/bin/docker kill sabnzbd
+        ExecStartPre=-/usr/bin/docker rm sabnzbd
         ExecStartPre=/usr/bin/docker pull timhaak/sabnzbd
 
         ExecStart=/usr/bin/docker run -h sabnzbd --name="sabnzbd" -v /etc/docker/sabnzbd:/config -v /mnt/vol_1/share:/data -p 8080:8080 -p 9090:9090 timhaak/sabnzbd
@@ -45,8 +45,8 @@ coreos:
         [Service]
         TimeoutSec=0
 
-        ExecStartPre=/usr/bin/docker kill plex
-        ExecStartPre=/usr/bin/docker rm plex
+        ExecStartPre=-/usr/bin/docker kill plex
+        ExecStartPre=-/usr/bin/docker rm plex
         ExecStartPre=/usr/bin/docker pull timhaak/plex
 
         ExecStart=/usr/bin/docker run -h plex --name "plex" -v /etc/docker/plex:/config -v /mnt/vol_1/share:/data -p 32400:32400 timhaak/plex
@@ -67,8 +67,8 @@ coreos:
         [Service]
         TimeoutSec=0
 
-        ExecStartPre=/usr/bin/docker kill sickbeard
-        ExecStartPre=/usr/bin/docker rm sickbeard
+        ExecStartPre=-/usr/bin/docker kill sickbeard
+        ExecStartPre=-/usr/bin/docker rm sickbeard
         ExecStartPre=/usr/bin/docker pull timhaak/sickbeard
 
         ExecStart=/usr/bin/docker run -h sickbeard --name="sickbeard" -v /etc/docker/sickbeard:/config -v /mnt/vol_1/share:/data -p 8081:8081 timhaak/sickbeard
@@ -89,11 +89,11 @@ coreos:
         [Service]
         TimeoutSec=0
 
-        ExecStartPre=/usr/bin/docker kill couchpotato
-        ExecStartPre=/usr/bin/docker rm couchpotato
+        ExecStartPre=-/usr/bin/docker kill couchpotato
+        ExecStartPre=-/usr/bin/docker rm couchpotato
         ExecStartPre=/usr/bin/docker pull timhaak/couchpotato
 
-        ExecStart=/usr/bin/docker run -h couchpotato --name="couchpotato" -v /etc/docker/couchpotato:/config -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/movies -p 5050:5050 timhaak/couchpotato
+        ExecStart=/usr/bin/docker run -h couchpotato -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/movies -p 5050:5050 --name couchpotato timhaak/couchpotato
 
         ExecStop=/usr/bin/docker stop couchpotato
 
