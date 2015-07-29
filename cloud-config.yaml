@@ -14,7 +14,7 @@ coreos:
     - name: docker.service
       command: start
       enable: true
-    - name: docker-sabnzbd.service
+    - name: sabnzbd.service
       command: start
       content: |
         [Unit]
@@ -36,7 +36,7 @@ coreos:
 
         [Install]
         WantedBy=multi-user.target
-    - name: docker-plex.service
+    - name: plex.service
       command: start
       content: |
         [Unit]
@@ -58,7 +58,7 @@ coreos:
 
         [Install]
         WantedBy=multi-user.target
-    - name: docker-sickbeard.service
+    - name: sickbeard.service
       command: start
       content: |
         [Unit]
@@ -80,7 +80,7 @@ coreos:
 
         [Install]
         WantedBy=multi-user.target
-    - name: docker-couchpotato.service
+    - name: couchpotato.service
       command: start
       content: |
         [Unit]
@@ -93,7 +93,7 @@ coreos:
         ExecStartPre=-/usr/bin/docker rm couchpotato
         ExecStartPre=/usr/bin/docker pull timhaak/couchpotato
 
-        ExecStart=/usr/bin/docker run -h couchpotato -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/movies -p 5050:5050 --name couchpotato timhaak/couchpotato
+        ExecStart=/usr/bin/docker run -h couchpotato -v /etc/docker/couchpotato:/config -v /etc/docker/couchpotato:/data -v /mnt/vol_1/share:/videos -p 5050:5050 --name couchpotato timhaak/couchpotato
 
         ExecStop=/usr/bin/docker stop couchpotato
 
