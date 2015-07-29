@@ -118,16 +118,16 @@ coreos:
         DNS=8.8.4.4
 users:
   - name: core
-    passwd: $6$rounds=4096$okocwVWBdlLA$G5WtoBOKCGirVnSIIpaGxBEhNsJktLMpy54GylKw8f202Mbv.k8Bw/z7x.5Ztb03pMg7E/lmnh3ZfEXtqvgQZ0
+    passwd: 
   - groups:
       - sudo
       - docker
     ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfdmWUV2Q1kEsd9Ow6BjmYT6Vi3tUFfF01h8Nmz14E5OUN8h7tYr0ppGySYyhzcjxpaXKexGg49TNgL8L2W4MDqCy0hD4sXsYwPzSdCpWVQkIjY/uSwTGXbKRG8wQUyMkKWpU72KtAE1G+dbqjlygJrhIsUxmDz6qB/2vFIPpfWkiyCkT/4UsQBeaqGcvw4tgq90ZdEucARd+3gJM/7Mr/gQTHhCNYlYcSsO81lIfvkYzr8cDcTJNfW3PsP8KmuAumAy+5ML+VTaskvdQn4NkHc5sDWYZ7zW5qaTHN4Sn1OZCfRYM/jbY1s/iIoiWqMpEffqyt7fuVxXZ2SNsxmMGd tae.one@gmail.com
+      - ssh-rsa 
   - name: tae
-    passwd: $6$rounds=4096$okocwVWBdlLA$G5WtoBOKCGirVnSIIpaGxBEhNsJktLMpy54GylKw8f202Mbv.k8Bw/z7x.5Ztb03pMg7E/lmnh3ZfEXtqvgQZ0
+    passwd: 
   - groups:
       - sudo
       - docker
     ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfdmWUV2Q1kEsd9Ow6BjmYT6Vi3tUFfF01h8Nmz14E5OUN8h7tYr0ppGySYyhzcjxpaXKexGg49TNgL8L2W4MDqCy0hD4sXsYwPzSdCpWVQkIjY/uSwTGXbKRG8wQUyMkKWpU72KtAE1G+dbqjlygJrhIsUxmDz6qB/2vFIPpfWkiyCkT/4UsQBeaqGcvw4tgq90ZdEucARd+3gJM/7Mr/gQTHhCNYlYcSsO81lIfvkYzr8cDcTJNfW3PsP8KmuAumAy+5ML+VTaskvdQn4NkHc5sDWYZ7zW5qaTHN4Sn1OZCfRYM/jbY1s/iIoiWqMpEffqyt7fuVxXZ2SNsxmMGd tae.one@gmail.com
+      - ssh-rsa 
